@@ -1,26 +1,33 @@
+import { IPerson } from "../App";
+
 interface IPersonProps {
-    name: string
-    number: string
+  name: string;
+  number: string;
 }
 
 interface IPeopleProps {
-    people: IPersonProps[]
-    filter: string
+  people: IPerson[];
 }
 
 const Person = ({ name, number }: IPersonProps) => (
-    <p>{name} {number}</p>
-)
+  <div>
+    <p>
+      {name} {number}
+    </p>
+    <button>delete</button>
+  </div>
+);
 
-const People = ({ people, filter }: IPeopleProps) => {
-
-    const displayedPeople = (filter.trim() === "") ? people : people.filter(person => person.name.includes(filter.trim()))
-
-    return (
-        <div>
-            {displayedPeople.map(person => (<Person name={person.name} number={person.number} />))}
-        </div>
-    )
-}
+const People = ({ people }: IPeopleProps) => {
+  return (
+    <div>
+      <h3>Numbers</h3>
+      {people.map((person) => (
+        <Person key={person.id} name={person.name} number={person.number} />
+      ))}
+    </div>
+  );
+};
 
 export default People;
+
