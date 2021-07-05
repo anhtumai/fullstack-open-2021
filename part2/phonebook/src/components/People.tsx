@@ -1,33 +1,37 @@
 import { IPerson } from "../App";
 
 interface IPersonProps {
-  name: string;
-  number: string;
+  person: IPerson;
+  onDeletePerson(id: number): void;
 }
 
 interface IPeopleProps {
   people: IPerson[];
+  onDeletePerson(id: number): void;
 }
 
-const Person = ({ name, number }: IPersonProps) => (
+const Person = ({ person, onDeletePerson }: IPersonProps) => (
   <div>
     <p>
-      {name} {number}
+      {person.name} {person.number}
     </p>
-    <button>delete</button>
+    <button onClick={() => onDeletePerson(person.id)}>delete</button>
   </div>
 );
 
-const People = ({ people }: IPeopleProps) => {
+const People = ({ people, onDeletePerson }: IPeopleProps) => {
   return (
     <div>
       <h3>Numbers</h3>
       {people.map((person) => (
-        <Person key={person.id} name={person.name} number={person.number} />
+        <Person
+          key={person.id}
+          person={person}
+          onDeletePerson={onDeletePerson}
+        />
       ))}
     </div>
   );
 };
 
 export default People;
-

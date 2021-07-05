@@ -9,14 +9,22 @@ async function getAllPeople(): Promise<IPerson[]> {
   const request = axios.get(baseUrl);
   return request.then((response) => response.data);
 }
-async function create(newPersonInfo: IFormInfo): Promise<IPerson> {
+async function createPerson(newPersonInfo: IFormInfo): Promise<IPerson> {
   const request = axios.post(baseUrl, newPersonInfo);
   return request.then((response) => response.data);
 }
 
-async function update(id: number, newPersonInfo: IFormInfo): Promise<IPerson> {
+async function updatePerson(
+  id: number,
+  newPersonInfo: IFormInfo
+): Promise<IPerson> {
   const request = axios.put(`${baseUrl}/${id}`, newPersonInfo);
   return request.then((response) => response.data);
 }
 
-export { getAllPeople, create, update };
+async function deletePerson(id: number): Promise<any> {
+  const request = axios.delete(`${baseUrl}/${id}`);
+  return request.then((response) => response.data);
+}
+
+export { getAllPeople, createPerson, updatePerson, deletePerson };
