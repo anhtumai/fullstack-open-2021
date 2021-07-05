@@ -5,6 +5,8 @@ import People from "./components/People";
 import PersonForm, { IFormInfo } from "./components/Form";
 import Filter from "./components/Filter";
 
+import { getAllPeople, create } from "./services/persons";
+
 export interface IPerson {
   name: string;
   number: string;
@@ -12,10 +14,10 @@ export interface IPerson {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState<IPerson[] | []>([]);
+  const [persons, setPersons] = useState<IPerson[]>([]);
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    getAllPeople().then((persons) => {
+      setPersons(persons);
     });
   }, []);
 
@@ -25,17 +27,17 @@ const App = () => {
     person.name.includes(filter.trim())
   );
 
-  const handleSubmit = (submittedPerson: IFormInfo) => {
+  const handleSubmit = (submittedPersonInfo: IFormInfo) => {
     if (
-      persons.filter((person) => person.name === submittedPerson.name).length >
-      0
+      persons.filter((person) => person.name === submittedPersonInfo.name)
+        .length > 0
     ) {
-      alert(`${submittedPerson.name} is already added to phonebook`);
+      alert(`${submittedPersonInfo.name} is already added to phonebook`);
       return;
     }
-    const copiedPersons = [...persons];
-    copiedPersons.push({ ...submittedPerson, id: copiedPersons.length + 1 });
-    setPersons(copiedPersons);
+    create(submittedPersonInfo).then((newPerson: IPerson) => {
+      setPersons(persons.concat(newPerson));
+    });
   };
 
   return (
