@@ -5,7 +5,12 @@ import People from "./components/People";
 import PersonForm, { IFormInfo } from "./components/Form";
 import Filter from "./components/Filter";
 
-import { getAllPeople, createPerson, deletePerson } from "./services/persons";
+import {
+  getAllPeople,
+  createPerson,
+  deletePerson,
+  updatePerson,
+} from "./services/persons";
 
 export interface IPerson {
   name: string;
@@ -28,13 +33,27 @@ const App = () => {
   );
 
   const handleSubmit = (submittedPersonInfo: IFormInfo) => {
-    if (persons.some((person) => person.name === submittedPersonInfo.name)) {
-      alert(`${submittedPersonInfo.name} is already added to phonebook`);
-      return;
+    const submittedPerson = persons.find(
+      (person) => person.name === submittedPersonInfo.name
+    );
+    if (submittedPerson !== undefined) {
+      const updateAccepted = window.confirm(
+        `${submittedPerson.name} is already added to phonebook, replace the old number with a new one?`
+      );
+      if (!updateAccepted) return;
+
+      const id = submittedPerson.id;
+      updatePerson(id, submittedPersonInfo).then((updatedPerson) => {
+        const newPersons = persons.map((person) =>
+          person.id === id ? updatedPerson : person
+        );
+        setPersons(newPersons);
+      });
+    } else {
+      createPerson(submittedPersonInfo).then((newPerson: IPerson) => {
+        setPersons(persons.concat(newPerson));
+      });
     }
-    createPerson(submittedPersonInfo).then((newPerson: IPerson) => {
-      setPersons(persons.concat(newPerson));
-    });
   };
 
   const handleDelete = (id: number) => {
@@ -43,8 +62,8 @@ const App = () => {
     const deleteAccepted = window.confirm(`Delete ${deletedPerson.name} ?`);
     if (!deleteAccepted) return;
     deletePerson(id).then((_) => {
-      const updatedPersons = persons.filter((person) => person.id !== id);
-      setPersons(updatedPersons);
+      const newPersons = persons.filter((person) => person.id !== id);
+      setPersons(newPersons);
     });
   };
 
