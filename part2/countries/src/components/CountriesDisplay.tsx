@@ -68,8 +68,12 @@ const CountriesDisplay = ({
   }
   return (
     <div>
-      {countries.map((country) => (
-        <CountryNameDisplay country={country} setCountry={setCountry} />
+      {countries.map((country, index) => (
+        <CountryNameDisplay
+          key={index}
+          country={country}
+          setCountry={setCountry}
+        />
       ))}
     </div>
   );
