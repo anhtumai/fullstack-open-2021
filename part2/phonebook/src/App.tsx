@@ -30,8 +30,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log("debug if this call many times");
-    setTimeout(() => setSuccessMessage(null), 3000);
+    setTimeout(() => setSuccessMessage(null), 5000);
   }, [successMessage]);
 
   const displayedPeople = persons.filter((person) =>
@@ -74,6 +73,7 @@ const App = () => {
     deletePerson(id).then((_) => {
       const newPersons = persons.filter((person) => person.id !== id);
       setPersons(newPersons);
+      setSuccessMessage(`Deleted ${deletedPerson.name}`);
     });
   };
 
