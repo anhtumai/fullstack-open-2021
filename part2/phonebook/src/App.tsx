@@ -22,6 +22,7 @@ const App = () => {
   const [persons, setPersons] = useState<IPerson[]>([]);
   const [filter, setFilter] = useState("");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     getAllPeople().then((persons) => {
@@ -32,6 +33,10 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => setSuccessMessage(null), 5000);
   }, [successMessage]);
+
+  useEffect(() => {
+    setTimeout(() => setErrorMessage(null), 5000);
+  }, [errorMessage]);
 
   const displayedPeople = persons.filter((person) =>
     person.name.includes(filter.trim())
@@ -70,17 +75,27 @@ const App = () => {
     if (deletedPerson === undefined) return;
     const deleteAccepted = window.confirm(`Delete ${deletedPerson.name} ?`);
     if (!deleteAccepted) return;
-    deletePerson(id).then((_) => {
-      const newPersons = persons.filter((person) => person.id !== id);
-      setPersons(newPersons);
-      setSuccessMessage(`Deleted ${deletedPerson.name}`);
-    });
+    deletePerson(id)
+      .then((_) => {
+        const newPersons = persons.filter((person) => person.id !== id);
+        setPersons(newPersons);
+        setSuccessMessage(`Deleted ${deletedPerson.name}`);
+      })
+      .catch((err) => {
+        console.log(err);
+        const newPersons = persons.filter((person) => person.id !== id);
+        setPersons(newPersons);
+        setErrorMessage(
+          `Information of ${deletedPerson.name} has already been removed from server`
+        );
+      });
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage}></Notification>
+      <Notification message={successMessage} state="success"></Notification>
+      <Notification message={errorMessage} state="error"></Notification>
       <Filter filter={filter} handleFilter={(e) => setFilter(e.target.value)} />
       <PersonForm handleSubmit={handleSubmit} />
       <People people={displayedPeople} onDeletePerson={handleDelete} />
