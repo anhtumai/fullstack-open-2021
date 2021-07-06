@@ -1,41 +1,51 @@
 import React, { useState } from "react";
 
+import InputWithLabel from "./InputWithLabel";
+
 export interface IFormInfo {
   name: string;
   number: string;
 }
 
 interface IPersonFormProps {
-  handleSubmit(submittedPerson: IFormInfo): void;
+  handleSubmit(submittedInfo: IFormInfo): void;
 }
 
 const PersonForm = ({ handleSubmit }: IPersonFormProps) => {
   const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const resetInputFields = () => {
     setName("");
-    setNumber("");
+    setPhoneNumber("");
   };
 
   const onSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    handleSubmit(submittedPerson);
+    handleSubmit(submittedInfo);
     resetInputFields();
   };
 
-  const submittedPerson = { name: name.trim(), number: number.trim() };
+  const submittedInfo = { name, number: phoneNumber };
 
   return (
     <>
       <h3>Add a new:</h3>
       <form onSubmit={onSubmit}>
-        <div>
-          <p>name: </p>
-          <input value={name} onChange={(e) => setName(e.target.value)} />
-          <p>number: </p>
-          <input value={number} onChange={(e) => setNumber(e.target.value)} />
-        </div>
+        <InputWithLabel
+          htmlFor="name"
+          value={name}
+          onInputChange={(e) => setName(e.target.value)}
+        >
+          <p>name:</p>
+        </InputWithLabel>
+        <InputWithLabel
+          htmlFor="number"
+          value={phoneNumber}
+          onInputChange={(e) => setPhoneNumber(e.target.value)}
+        >
+          <p>number:</p>
+        </InputWithLabel>{" "}
         <div>
           <button type="submit">add</button>
         </div>
@@ -45,4 +55,3 @@ const PersonForm = ({ handleSubmit }: IPersonFormProps) => {
 };
 
 export default PersonForm;
-

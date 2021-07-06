@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 
 import People from "./components/People";
 import PersonForm, { IFormInfo } from "./components/Form";
@@ -32,6 +31,15 @@ const App = () => {
     person.name.includes(filter.trim())
   );
 
+  const updatePersonsById = (id: number, info: IFormInfo) => {
+    updatePerson(id, info).then((updatedPerson) => {
+      const newPersons = persons.map((person) =>
+        person.id === id ? updatedPerson : person
+      );
+      setPersons(newPersons);
+    });
+  };
+
   const handleSubmit = (submittedPersonInfo: IFormInfo) => {
     const submittedPerson = persons.find(
       (person) => person.name === submittedPersonInfo.name
@@ -40,15 +48,8 @@ const App = () => {
       const updateAccepted = window.confirm(
         `${submittedPerson.name} is already added to phonebook, replace the old number with a new one?`
       );
-      if (!updateAccepted) return;
-
-      const id = submittedPerson.id;
-      updatePerson(id, submittedPersonInfo).then((updatedPerson) => {
-        const newPersons = persons.map((person) =>
-          person.id === id ? updatedPerson : person
-        );
-        setPersons(newPersons);
-      });
+      if (updateAccepted)
+        updatePersonsById(submittedPerson.id, submittedPersonInfo);
     } else {
       createPerson(submittedPersonInfo).then((newPerson: IPerson) => {
         setPersons(persons.concat(newPerson));
