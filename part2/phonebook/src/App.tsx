@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import People from "./components/People";
 import PersonForm, { IFormInfo } from "./components/Form";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 
 import {
   getAllPeople,
@@ -19,13 +20,19 @@ export interface IPerson {
 
 const App = () => {
   const [persons, setPersons] = useState<IPerson[]>([]);
+  const [filter, setFilter] = useState("");
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   useEffect(() => {
     getAllPeople().then((persons) => {
       setPersons(persons);
     });
   }, []);
 
-  const [filter, setFilter] = useState("");
+  useEffect(() => {
+    console.log("debug if this call many times");
+    setTimeout(() => setSuccessMessage(null), 3000);
+  }, [successMessage]);
 
   const displayedPeople = persons.filter((person) =>
     person.name.includes(filter.trim())
@@ -50,9 +57,11 @@ const App = () => {
       );
       if (updateAccepted)
         updatePersonsById(submittedPerson.id, submittedPersonInfo);
+      setSuccessMessage(`Updated ${submittedPerson.name}`);
     } else {
       createPerson(submittedPersonInfo).then((newPerson: IPerson) => {
         setPersons(persons.concat(newPerson));
+        setSuccessMessage(`Added ${newPerson.name}`);
       });
     }
   };
@@ -71,6 +80,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage}></Notification>
       <Filter filter={filter} handleFilter={(e) => setFilter(e.target.value)} />
       <PersonForm handleSubmit={handleSubmit} />
       <People people={displayedPeople} onDeletePerson={handleDelete} />
