@@ -37,14 +37,15 @@ const PersonForm = ({ handleSubmit }: IPersonFormProps) => {
           value={name}
           onInputChange={(e) => setName(e.target.value)}
         >
-          <p>name:</p>
+          <span>name:</span>
         </InputWithLabel>
+        <br />
         <InputWithLabel
           htmlFor="number"
           value={phoneNumber}
           onInputChange={(e) => setPhoneNumber(e.target.value)}
         >
-          <p>number:</p>
+          <span>number:</span>
         </InputWithLabel>{" "}
         <div>
           <button type="submit">add</button>
