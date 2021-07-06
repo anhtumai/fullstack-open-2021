@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import WeatherDisplay from "./WeatherDisplay";
+import CountryViewDisplay from "./CountryViewDisplay";
 
 interface ILanguageData {
   name: string;
@@ -13,99 +13,16 @@ export interface ICountryData {
   flag: string;
 }
 
-interface IWeatherData {
-  temperature: number;
-  weather_icons: string;
-  wind_speed: number;
-  wind_degree: number;
-  wind_dir: string;
-}
-
-interface IWeatherDisplayProps {
-  countryName: string;
-}
-
 interface ICountriesDisplayProps {
   countries: ICountryData[];
   country: ICountryData | undefined;
   setCountry(newCountry: ICountryData): void;
 }
 
-interface ICountryViewDisplayProps {
-  country: ICountryData;
-}
-
 interface ICountryNameDisplayProps {
   country: ICountryData;
   setCountry(country: ICountryData): void;
 }
-
-const CountryViewDisplay = ({ country }: ICountryViewDisplayProps) => {
-  return (
-    <div>
-      <h3>{country.name}</h3>
-      <div>
-        <p>Capital: {country.capital}</p>
-        <p>Population: {country.population}</p>
-      </div>
-      <h3>Languages</h3>
-      <ul>
-        {country.languages.map((language, index) => (
-          <li key={index}>{language.name}</li>
-        ))}
-      </ul>
-      <img src={country.flag} alt="Flag not found" width="100"></img>
-      <WeatherDisplay countryName={country.name} />
-    </div>
-  );
-};
-
-const WeatherDisplay = ({ countryName }: IWeatherDisplayProps) => {
-  const [weather, setWeather] = useState<IWeatherData>();
-  useEffect(() => {
-    let mounted = true;
-    axios
-      .get("http://api.weatherstack.com/current", {
-        params: {
-          access_key: process.env.REACT_APP_API_KEY,
-          query: countryName,
-        },
-      })
-      .then((response) => {
-        if (mounted) setWeather(response.data.current);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    return () => {
-      mounted = false;
-    };
-  }, [countryName]);
-  if (weather !== undefined) {
-    return (
-      <div>
-        <h3>Weather</h3>
-        <p>
-          <b>temperature:</b> {weather.temperature} Celcius
-        </p>
-        <img
-          src={weather.weather_icons}
-          alt="Weather icon not found"
-          width="40"
-        ></img>
-        <p>
-          {weather.wind_speed} mph direction {weather.wind_dir}
-        </p>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <h3>Weather</h3>
-      <p>Loading...</p>
-    </div>
-  );
-};
 
 const CountryNameDisplay = ({
   country,
@@ -145,22 +62,17 @@ const CountriesDisplay = ({
     return (
       <div>
         <CountryViewDisplay country={displayedCountry} />
+        <WeatherDisplay countryName={displayedCountry.name} />
       </div>
     );
   }
-  console.log(countries);
   return (
     <div>
-      {countries.map((country, index) => (
-        <CountryNameDisplay
-          key={index}
-          country={country}
-          setCountry={setCountry}
-        />
+      {countries.map((country) => (
+        <CountryNameDisplay country={country} setCountry={setCountry} />
       ))}
     </div>
   );
 };
 
 export default CountriesDisplay;
-
