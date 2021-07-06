@@ -12,10 +12,11 @@ interface IPeopleProps {
 
 const Person = ({ person, onDeletePerson }: IPersonProps) => (
   <div>
-    <p>
-      {person.name} {person.number}
-    </p>
-    <button onClick={() => onDeletePerson(person.id)}>delete</button>
+    <span>{person.name}</span>
+    &nbsp;
+    <span>{person.number}</span>
+    &nbsp;
+    <button onClick={() => onDeletePerson(person.id)}>Delete</button>
   </div>
 );
 
