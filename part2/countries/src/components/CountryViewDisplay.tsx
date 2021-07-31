@@ -1,5 +1,3 @@
-import { ICountryData } from "./CountriesDisplay";
-
 interface ICountryViewDisplayProps {
   country: ICountryData;
 }
