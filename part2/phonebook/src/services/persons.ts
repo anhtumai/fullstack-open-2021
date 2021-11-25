@@ -3,7 +3,7 @@ import { IPerson } from "../App";
 
 import { IFormInfo } from "../components/Form";
 
-const baseUrl = "http://localhost:3001/persons";
+const baseUrl = "https://phonebook-backend-87.herokuapp.com/api/persons";
 
 async function getAllPeople(): Promise<IPerson[]> {
   const request = axios.get(baseUrl);
