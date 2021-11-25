@@ -1,0 +1,58 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are grat",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "let try this one",
+      "id": 3
+    },
+    {
+      "content": "death is like the wind",
+      "id": 4
+    },
+    {
+      "content": "asdfafdfas",
+      "id": 5
+    },
+    {
+      "content": "it gets executed in the begninnng only",
+      "id": 6
+    },
+    {
+      "content": "another notes",
+      "id": 7
+    },
+    {
+      "content": "another notes 2",
+      "id": 8
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "hellas",
+      "number": "040-123456",
+      "id": 3
+    },
+    {
+      "name": "anhtumai",
+      "number": "040-012345",
+      "id": 4
+    }
+  ]
+}
